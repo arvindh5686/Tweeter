@@ -1,6 +1,8 @@
-package com.codepath.apps.tweets;
+package com.codepath.apps.tweets.main;
 
 import android.content.Context;
+
+import com.codepath.apps.tweets.net.TwitterClient;
 
 /*
  * This is the Android application itself and is used to configure various settings

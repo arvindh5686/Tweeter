@@ -20,9 +20,9 @@ android:orientation="vertical">
 
 <RelativeLayout
     android:layout_width="300dp"
-    android:layout_height="70dp"
+    android:layout_height="90dp"
     android:id="@+id/rightLayout"
-    android:layout_marginLeft="60dp">
+    android:layout_marginLeft="70dp">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="20dp"
@@ -49,6 +49,7 @@ android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/rightBottom"
         android:layout_below="@+id/rightTop">
         <TextView
             android:layout_width="match_parent"

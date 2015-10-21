@@ -1,4 +1,4 @@
-package com.codepath.apps.tweets;
+package com.codepath.apps.tweets.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +7,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import com.codepath.apps.tweets.R;
+import com.codepath.apps.tweets.main.TwitterApplication;
+import com.codepath.apps.tweets.net.TwitterClient;
+import com.codepath.apps.tweets.adapters.TweetsAdapter;
 import com.codepath.apps.tweets.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
