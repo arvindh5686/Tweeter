@@ -1,4 +1,4 @@
-package com.codepath.apps.tweets.net;
+package com.walmartlabs.classwork.tweets.net;
 
 import android.content.Context;
 

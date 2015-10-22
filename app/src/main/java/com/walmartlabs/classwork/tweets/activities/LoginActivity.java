@@ -1,4 +1,4 @@
-package com.codepath.apps.tweets.activities;
+package com.walmartlabs.classwork.tweets.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,8 +6,8 @@ import android.view.Menu;
 import android.view.View;
 
 import com.codepath.apps.tweets.R;
-import com.codepath.apps.tweets.net.TwitterClient;
 import com.codepath.oauth.OAuthLoginActionBarActivity;
+import com.walmartlabs.classwork.tweets.net.TwitterClient;
 
 public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 

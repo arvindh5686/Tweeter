@@ -1,8 +1,8 @@
-package com.codepath.apps.tweets.main;
+package com.walmartlabs.classwork.tweets.main;
 
 import android.content.Context;
 
-import com.codepath.apps.tweets.net.TwitterClient;
+import com.walmartlabs.classwork.tweets.net.TwitterClient;
 
 /*
  * This is the Android application itself and is used to configure various settings

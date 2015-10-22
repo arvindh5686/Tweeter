@@ -1,4 +1,4 @@
-package com.codepath.apps.tweets.activities;
+package com.walmartlabs.classwork.tweets.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,11 +8,11 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.codepath.apps.tweets.R;
-import com.codepath.apps.tweets.main.TwitterApplication;
-import com.codepath.apps.tweets.net.TwitterClient;
-import com.codepath.apps.tweets.adapters.TweetsAdapter;
-import com.codepath.apps.tweets.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.walmartlabs.classwork.tweets.adapters.TweetsAdapter;
+import com.walmartlabs.classwork.tweets.main.TwitterApplication;
+import com.walmartlabs.classwork.tweets.models.Tweet;
+import com.walmartlabs.classwork.tweets.net.TwitterClient;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -70,9 +70,9 @@ public class TimelineActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+/*        if (id == R.id.action_settings) {
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }

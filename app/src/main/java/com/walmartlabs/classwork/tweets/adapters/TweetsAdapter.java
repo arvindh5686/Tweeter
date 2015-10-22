@@ -1,4 +1,4 @@
-package com.codepath.apps.tweets.adapters;
+package com.walmartlabs.classwork.tweets.adapters;
 
 import android.content.Context;
 import android.net.Uri;
@@ -11,8 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.tweets.R;
-import com.codepath.apps.tweets.models.Tweet;
 import com.squareup.picasso.Picasso;
+import com.walmartlabs.classwork.tweets.models.Tweet;
 
 import java.util.List;
 

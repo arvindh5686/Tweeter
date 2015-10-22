@@ -1,4 +1,4 @@
-package com.codepath.apps.tweets.models;
+package com.walmartlabs.classwork.tweets.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;

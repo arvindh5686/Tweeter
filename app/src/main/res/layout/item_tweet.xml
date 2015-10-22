@@ -2,9 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-android:background="@android:color/white"
+android:background="@color/gray_color"
 android:layout_marginBottom="10dp"
-android:orientation="vertical">
+android:orientation="vertical"
+    >
 
 <RelativeLayout
     android:layout_width="match_parent"
@@ -49,7 +50,7 @@ android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/rightBottom"
+        android:id="@+id/rightMiddle"
         android:layout_below="@+id/rightTop">
         <TextView
             android:layout_width="match_parent"
@@ -59,6 +60,21 @@ android:orientation="vertical">
             android:text="Body"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true" />
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/rightBottom"
+        android:layout_below="@+id/rightMiddle">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ivRetweet"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_retweet"
+            />
     </RelativeLayout>
 </RelativeLayout>
 
