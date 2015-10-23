@@ -14,7 +14,12 @@ import com.codepath.apps.tweets.R;
 import com.squareup.picasso.Picasso;
 import com.walmartlabs.classwork.tweets.models.Tweet;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by abalak5 on 10/21/15.
@@ -25,6 +30,7 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
         public ImageView ivProfileImage;
         public TextView tvUserName;
         public TextView tvBody;
+        public TextView tvRelativeTimeStamp;
     }
 
     public TweetsAdapter(Context context, List<Tweet> objects) {
@@ -46,6 +52,7 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
             viewHolder.ivProfileImage = (ImageView)convertView.findViewById(R.id.ivProfileImage);
             viewHolder.tvUserName = (TextView)convertView.findViewById(R.id.tvUserName);
             viewHolder.tvBody = (TextView)convertView.findViewById(R.id.tvBody);
+            viewHolder.tvRelativeTimeStamp = (TextView)convertView.findViewById(R.id.tvRelativeTimeStamp);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -53,8 +60,58 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
         // Populate data into the template view using the data object
         viewHolder.tvUserName.setText(Html.fromHtml(tweet.getUser().getName()));
         viewHolder.tvBody.setText(Html.fromHtml(tweet.getBody()));
+
+        try {
+            SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
+            String currDateStr = df.format(Calendar.getInstance().getTime());
+            Date currDate = df.parse(currDateStr);
+
+            Date tweetDate = getTimeStamp(tweet.getCreatedAt());
+            String timeStamp = getRelativeTimeStamp(currDate, tweetDate);
+            viewHolder.tvRelativeTimeStamp.setText(timeStamp);
+            //viewHolder.tvRelativeTimeStamp.sett(getTimeStamp(tweet.getCreatedAt()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         Picasso.with(getContext()).load(Uri.parse(tweet.getUser().getProfileImageUrl()))/*.placeholder(R.drawable.ic_nocover)*/.into(viewHolder.ivProfileImage);
         // Return the completed view to render on screen
         return convertView;
+    }
+
+    public static Date getTimeStamp(String date) throws ParseException {
+        final String TWITTER="EEE MMM dd HH:mm:ss z yyyy";
+        SimpleDateFormat sf = new SimpleDateFormat(TWITTER);
+        sf.setTimeZone(TimeZone.getTimeZone("GMT-04:00"));
+        sf.setLenient(true);
+        return sf.parse(date);
+    }
+
+    public static String getRelativeTimeStamp(Date currDate, Date tweetDate) {
+
+        String timeStamp = "";
+        long difference = currDate.getTime() - tweetDate.getTime();
+
+        long seconds = 1000;
+        long minutes = seconds * 60;
+        long hours = minutes * 60;
+        long days = hours * 24;
+
+        long elapsedDays = difference / days ;
+        timeStamp += elapsedDays > 0 && timeStamp.equalsIgnoreCase("") ? Long.toString(elapsedDays) + "d" : "";
+        difference = difference % days;
+
+        long elapsedHours = difference / hours;
+        timeStamp += elapsedHours > 0 && timeStamp.equalsIgnoreCase("") ? Long.toString(elapsedHours) + "h" : "";
+        difference = difference % hours;
+
+        long elapsedMinutes = difference / minutes;
+        timeStamp += elapsedMinutes > 0 && timeStamp.equalsIgnoreCase("") ? Long.toString(elapsedMinutes) + "m" : "";
+        difference = difference % minutes;
+
+        long elapsedSeconds = difference / seconds;
+        timeStamp += elapsedSeconds > 0 && timeStamp.equalsIgnoreCase("") ? Long.toString(elapsedSeconds) + "s" : "";
+
+        return timeStamp;
     }
 }

@@ -2,6 +2,9 @@ package com.walmartlabs.classwork.tweets.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
+
+import com.walmartlabs.classwork.tweets.activities.TimelineActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -68,6 +71,9 @@ public class Tweet implements Parcelable {
                 tweets.add(tweet);
             }
         }
+
+        //get last tweets uid and subtract one as max_id is inclusive
+        TimelineActivity.maxId = tweets.get(tweets.size() - 1).getUid() - 1;
         return tweets;
     }
 
@@ -78,6 +84,7 @@ public class Tweet implements Parcelable {
             tweet.uid = jsonObject.getLong("id");
             tweet.createdAt = jsonObject.getString("created_at");
             tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
+            Log.i("uid", Long.toString(tweet.uid));
         } catch (JSONException e) {
             e.printStackTrace();
             return null;

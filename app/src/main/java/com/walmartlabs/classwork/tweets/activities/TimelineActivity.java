@@ -9,10 +9,12 @@ import android.widget.ListView;
 
 import com.codepath.apps.tweets.R;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.walmartlabs.classwork.tweets.adapters.TweetsAdapter;
 import com.walmartlabs.classwork.tweets.main.TwitterApplication;
 import com.walmartlabs.classwork.tweets.models.Tweet;
 import com.walmartlabs.classwork.tweets.net.TwitterClient;
+import com.walmartlabs.classwork.tweets.util.EndlessScrollListener;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -26,6 +28,7 @@ public class TimelineActivity extends AppCompatActivity {
     private TweetsAdapter aTweets;
     private ArrayList<Tweet> tweets;
     private ListView lvTweets;
+    public static long maxId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +39,28 @@ public class TimelineActivity extends AppCompatActivity {
         aTweets = new TweetsAdapter(this, tweets);
         lvTweets = (ListView) findViewById(R.id.lvTweets);
         lvTweets.setAdapter(aTweets);
-        fetchAndPopulateTimeline();
+        setupListView();
+        RequestParams params = new RequestParams();
+        params.put("count", 25);
+        params.put("since_id", 1);
+        fetchAndPopulateTimeline(params);
     }
 
-    private void fetchAndPopulateTimeline() {
-        client.getTimeline(new JsonHttpResponseHandler() {
+    private void setupListView() {
+        lvTweets.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                RequestParams params = new RequestParams();
+                params.put("count", 25);
+                params.put("max_id", TimelineActivity.maxId);
+                fetchAndPopulateTimeline(params);
+                return true;
+            }
+        });
+    }
+
+    private void fetchAndPopulateTimeline(RequestParams params) {
+        client.getTimeline(params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 ArrayList<Tweet> tweets = Tweet.fromJsonArray(response);
