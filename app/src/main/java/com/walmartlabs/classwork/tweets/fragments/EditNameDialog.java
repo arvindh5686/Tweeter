@@ -1,5 +1,7 @@
 package com.walmartlabs.classwork.tweets.fragments;
 
+import android.app.Dialog;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -7,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +18,7 @@ import android.widget.ImageView;
 import com.codepath.apps.tweets.R;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.squareup.picasso.Picasso;
 import com.walmartlabs.classwork.tweets.activities.TimelineActivity;
 import com.walmartlabs.classwork.tweets.main.TwitterApplication;
 import com.walmartlabs.classwork.tweets.models.Tweet;
@@ -51,11 +55,24 @@ public class EditNameDialog extends DialogFragment {
     }
 
     @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        // request a window without the title
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        return dialog;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         client = TwitterApplication.getRestClient();
         final View view = inflater.inflate(R.layout.fragment_compose_tweet, container);
+        ImageView ivProfileImage = (ImageView) view.findViewById(R.id.ivProfileImage);
+        Picasso.with(getContext()).
+                load(Uri.parse(getString(R.string.current_user_profile_image)))
+                .into(ivProfileImage);
+
         Button btnTweet = (Button) view.findViewById(R.id.btnTweet);
         btnTweet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,6 +87,11 @@ public class EditNameDialog extends DialogFragment {
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         dismiss();
                         Tweet postResponse = Tweet.fromJson(response);
+                        Log.i("imageurl", postResponse.getUser().getProfileImageUrl());
+                        Log.i("name", postResponse.getUser().getName());
+                        Log.i("screenname", postResponse.getUser().getScreenName());
+                        postResponse.getUser().getName();
+                        postResponse.getUser().getScreenName();
                         TimelineActivity activity = (TimelineActivity) getActivity();
                         activity.onFinishEditDialog(postResponse);
                     }
