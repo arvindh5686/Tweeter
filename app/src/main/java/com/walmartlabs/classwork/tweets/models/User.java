@@ -3,17 +3,30 @@ package com.walmartlabs.classwork.tweets.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 /**
  * Created by abalak5 on 10/21/15.
  */
-public class User implements Parcelable {
 
+@Table(name = "users")
+public class User extends Model implements Parcelable {
+
+    @Column(name = "name")
     private String name;
+    @Column(name = "uid")
     private Long uid;
+    @Column(name = "screenname")
     private String screenName;
+    @Column(name = "profileimageurl")
     private String profileImageUrl;
 
     public String getName() {
@@ -56,12 +69,22 @@ public class User implements Parcelable {
             user.uid = jsonObject.getLong("id");
             user.screenName = jsonObject.getString("screen_name");
             user.profileImageUrl = jsonObject.getString("profile_image_url");
+            user.save();
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
         }
         // Return new object
         return user;
+    }
+
+    // Record Finders
+    public static User byId(long id) {
+        return new Select().from(User.class).where("uid = ?", id).executeSingle();
+    }
+
+    public static List<User> recentItems() {
+        return new Select().from(User.class).orderBy("id DESC").limit("300").execute();
     }
 
     @Override

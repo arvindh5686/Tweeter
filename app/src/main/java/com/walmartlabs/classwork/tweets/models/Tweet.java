@@ -4,6 +4,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 import com.walmartlabs.classwork.tweets.activities.TimelineActivity;
 
 import org.json.JSONArray;
@@ -11,17 +15,25 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by abalak5 on 10/21/15.
  */
 
-public class Tweet implements Parcelable {
+@Table(name = "tweets")
+public class Tweet extends Model implements Parcelable {
     //unique id for tweet
+    @Column(name = "uid")
     private long uid;
+    @Column(name = "body")
     private String body;
+    @Column(name = "user")
     private User user;
+    @Column(name = "createdAt")
     private String createdAt;
+
+    public static String tweetMessage;
 
     public long getUid() {
         return uid;
@@ -74,6 +86,9 @@ public class Tweet implements Parcelable {
 
         //get last tweets uid and subtract one as max_id is inclusive
         TimelineActivity.maxId = tweets.get(tweets.size() - 1).getUid() - 1;
+        //get first tweets uid and use as is as since_id is not inclusive
+        TimelineActivity.sinceId = tweets.get(0).getUid();
+
         return tweets;
     }
 
@@ -85,6 +100,7 @@ public class Tweet implements Parcelable {
             tweet.createdAt = jsonObject.getString("created_at");
             tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
             Log.i("uid", Long.toString(tweet.uid));
+            tweet.save();
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
@@ -93,6 +109,14 @@ public class Tweet implements Parcelable {
         return tweet;
     }
 
+    // Record Finders
+    public static Tweet byId(long id) {
+        return new Select().from(Tweet.class).where("uid = ?", id).executeSingle();
+    }
+
+    public static List<Tweet> recentItems() {
+        return new Select().from(Tweet.class).orderBy("id DESC").limit("300").execute();
+    }
 
     @Override
     public int describeContents() {

@@ -9,7 +9,7 @@
         app:showAsAction="ifRoom|collapseActionView"/>
 
     <item
-        android:id="@+id/menuSettings"
+        android:id="@+id/compose_tweet"
         android:title="Twitter icon"
         android:icon="@drawable/ic_twitter"
         app:showAsAction="ifRoom">
