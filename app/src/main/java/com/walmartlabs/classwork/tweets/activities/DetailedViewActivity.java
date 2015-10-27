@@ -1,6 +1,8 @@
 package com.walmartlabs.classwork.tweets.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -38,6 +40,8 @@ public class DetailedViewActivity extends AppCompatActivity implements ComposeTw
         tvScreenName.setText("@" + tweet.getUser().getScreenName());
         tvName.setText(tweet.getUser().getName());
         tvBody.setText(tweet.getBody());
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#4FAAF1")));
     }
 
     @Override
