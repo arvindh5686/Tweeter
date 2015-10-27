@@ -18,7 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.activeandroid.ActiveAndroid;
-import com.activeandroid.query.Select;
+import com.activeandroid.query.Delete;
 import com.codepath.apps.tweets.R;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -26,6 +26,7 @@ import com.walmartlabs.classwork.tweets.adapters.TweetsAdapter;
 import com.walmartlabs.classwork.tweets.fragments.ComposeTweetDialog;
 import com.walmartlabs.classwork.tweets.main.TwitterApplication;
 import com.walmartlabs.classwork.tweets.models.Tweet;
+import com.walmartlabs.classwork.tweets.models.User;
 import com.walmartlabs.classwork.tweets.net.TwitterClient;
 import com.walmartlabs.classwork.tweets.util.EndlessScrollListener;
 
@@ -106,6 +107,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
 
     private void fetchAndUpdateFeed(RequestParams params) {
         if(isNetworkAvailable()) {
+            clearCache();
             client.getTimeline(params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -132,6 +134,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
 
     private void fetchAndPopulateTimeline(RequestParams params) {
         if (isNetworkAvailable()) {
+            clearCache();
             client.getTimeline(params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -151,13 +154,15 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
     }
 
     public void getFromCache() {
-        List<Tweet> tweets  = new Select()
-                .from(Tweet.class)
-                .orderBy("uid DESC")
-                .execute();
+        List<Tweet> tweets  = Tweet.recentItems();
         aTweets.clear();
-        aTweets.notifyDataSetChanged();
         aTweets.addAll(tweets);
+        aTweets.notifyDataSetChanged();
+    }
+
+    public void clearCache() {
+        new Delete().from(Tweet.class).execute();
+        new Delete().from(User.class).execute();
     }
 
     @Override
@@ -177,7 +182,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
         //noinspection SimplifiableIfStatement
         if (id == R.id.compose_tweet) {
             FragmentManager fm = getSupportFragmentManager();
-            composeTweetDialog = ComposeTweetDialog.newInstance("Some Title", null);
+            composeTweetDialog = ComposeTweetDialog.newInstance(null);
             composeTweetDialog.show(fm, "fragment_compose_tweet");
         }
 

@@ -68,7 +68,7 @@ public class DetailedViewActivity extends AppCompatActivity implements ComposeTw
 
     public void replyToTweet(View view) {
         FragmentManager fm = getSupportFragmentManager();
-        composeTweetDialog = ComposeTweetDialog.newInstance("Some Title", tweet);
+        composeTweetDialog = ComposeTweetDialog.newInstance(tweet);
         composeTweetDialog.show(fm, "fragment_compose_tweet");
     }
 

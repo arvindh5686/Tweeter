@@ -115,7 +115,7 @@ public class Tweet extends Model implements Parcelable {
     }
 
     public static List<Tweet> recentItems() {
-        return new Select().from(Tweet.class).orderBy("id DESC").limit("300").execute();
+        return new Select().from(Tweet.class).orderBy("uid DESC").limit("300").execute();
     }
 
     @Override

@@ -56,7 +56,7 @@ public class ComposeTweetDialog extends DialogFragment {
         // Use `newInstance` instead as shown below
     }
 
-    public static ComposeTweetDialog newInstance(String title, Tweet tweet) {
+    public static ComposeTweetDialog newInstance(Tweet tweet) {
         if (tweet != null) {
             isReply = true;
             inReplyToTweet = tweet;
@@ -65,8 +65,6 @@ public class ComposeTweetDialog extends DialogFragment {
         }
         ComposeTweetDialog frag = new ComposeTweetDialog();
         Bundle args = new Bundle();
-        args.putString("title", title);
-        if (tweet != null) args.putString("screenname", tweet.getUser().getScreenName());
         frag.setArguments(args);
         return frag;
     }
@@ -103,9 +101,13 @@ public class ComposeTweetDialog extends DialogFragment {
         final Button btnTweet = (Button) view.findViewById(R.id.btnTweet);
         final TextView tvCount = (TextView) view.findViewById(R.id.tvCount);
         final EditText etTweet = (EditText) view.findViewById(R.id.etTweet);
+        etTweet.setText("");
 
-        String screenName = getArguments().getString("screenname");
-        if(screenName != null) etTweet.setText("@" + screenName);
+        //if replying to a tweet
+        if(isReply) {
+            etTweet.setText("@" + inReplyToTweet.getUser().getScreenName() + " ");
+            etTweet.setSelection(etTweet.getText().length());
+        }
         final int currLength = 140 - etTweet.getText().toString().length();
         tvCount.setText(Integer.toString(currLength));
 
@@ -176,8 +178,6 @@ public class ComposeTweetDialog extends DialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // Fetch arguments from bundle and set title
-        String title = getArguments().getString("title", "Enter Name");
-        getDialog().setTitle(title);
         getDialog().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
