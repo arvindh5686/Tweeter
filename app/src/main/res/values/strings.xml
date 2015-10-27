@@ -13,5 +13,6 @@
     <string name="tweet_status_label">What\'s happening</string>
 
     <color name="gray_color">#f5f8fa</color>
+    <string name="title_activity_detailed_view">DetailedView</string>
 
 </resources>

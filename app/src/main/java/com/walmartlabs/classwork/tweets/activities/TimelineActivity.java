@@ -1,6 +1,7 @@
 package com.walmartlabs.classwork.tweets.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
@@ -12,6 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.activeandroid.ActiveAndroid;
@@ -89,6 +92,16 @@ public class TimelineActivity extends AppCompatActivity implements EditNameDialo
                 return true;
             }
         });
+
+        lvTweets.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(TimelineActivity.this, DetailedViewActivity.class);
+                Tweet tweet = (Tweet) aTweets.getItem(position);
+                i.putExtra("tweet", tweet);
+                startActivity(i);
+            }
+        });
     }
 
     private void fetchAndUpdateFeed(RequestParams params) {
@@ -164,7 +177,7 @@ public class TimelineActivity extends AppCompatActivity implements EditNameDialo
         //noinspection SimplifiableIfStatement
         if (id == R.id.compose_tweet) {
             FragmentManager fm = getSupportFragmentManager();
-            editNameDialog = EditNameDialog.newInstance("Some Title");
+            editNameDialog = EditNameDialog.newInstance("Some Title", null);
             editNameDialog.show(fm, "fragment_compose_tweet");
         }
 

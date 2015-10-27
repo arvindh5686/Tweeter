@@ -25,6 +25,7 @@ import com.loopj.android.http.RequestParams;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
+import com.walmartlabs.classwork.tweets.activities.DetailedViewActivity;
 import com.walmartlabs.classwork.tweets.activities.TimelineActivity;
 import com.walmartlabs.classwork.tweets.main.TwitterApplication;
 import com.walmartlabs.classwork.tweets.models.Tweet;
@@ -41,6 +42,8 @@ public class EditNameDialog extends DialogFragment {
     private EditText etMessage;
     private TwitterClient client;
     private int charactersCount = 0;
+    private static boolean isReply = false;
+    private static Tweet inReplyToTweet;
 
     public interface EditNameDialogListener {
         void onFinishEditDialog(Tweet tweet);
@@ -53,10 +56,17 @@ public class EditNameDialog extends DialogFragment {
         // Use `newInstance` instead as shown below
     }
 
-    public static EditNameDialog newInstance(String title) {
+    public static EditNameDialog newInstance(String title, Tweet tweet) {
+        if (tweet != null) {
+            isReply = true;
+            inReplyToTweet = tweet;
+        } else {
+            isReply = false;
+        }
         EditNameDialog frag = new EditNameDialog();
         Bundle args = new Bundle();
         args.putString("title", title);
+        if (tweet != null) args.putString("screenname", tweet.getUser().getScreenName());
         frag.setArguments(args);
         return frag;
     }
@@ -92,14 +102,19 @@ public class EditNameDialog extends DialogFragment {
 
         final Button btnTweet = (Button) view.findViewById(R.id.btnTweet);
         final TextView tvCount = (TextView) view.findViewById(R.id.tvCount);
-        EditText etTweet = (EditText) view.findViewById(R.id.etTweet);
+        final EditText etTweet = (EditText) view.findViewById(R.id.etTweet);
+
+        String screenName = getArguments().getString("screenname");
+        if(screenName != null) etTweet.setText("@" + screenName);
+        final int currLength = 140 - etTweet.getText().toString().length();
+        tvCount.setText(Integer.toString(currLength));
 
         etTweet.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(charactersCount == 0) btnTweet.setEnabled(true);
                 charactersCount++;
-                tvCount.setText(Integer.toString(140 - charactersCount));
+                tvCount.setText(Integer.toString(currLength - charactersCount));
                 Log.i("count", Integer.toString(charactersCount));
             }
             @Override
@@ -122,6 +137,7 @@ public class EditNameDialog extends DialogFragment {
                 Log.i("status", status);
                 RequestParams params = new RequestParams();
                 params.put("status", status);
+                if(isReply) params.put("in_reply_to_status_id", inReplyToTweet.getUid());
                 client.postTweet(params, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -129,8 +145,13 @@ public class EditNameDialog extends DialogFragment {
                         Tweet postResponse = Tweet.fromJson(response);
                         postResponse.getUser().getName();
                         postResponse.getUser().getScreenName();
-                        TimelineActivity activity = (TimelineActivity) getActivity();
-                        activity.onFinishEditDialog(postResponse);
+                        if(isReply) {
+                            DetailedViewActivity activity = (DetailedViewActivity) getActivity();
+                            activity.onFinishEditDialog(postResponse);
+                        } else {
+                            TimelineActivity activity = (TimelineActivity) getActivity();
+                            activity.onFinishEditDialog(postResponse);
+                        }
                     }
 
                     @Override
