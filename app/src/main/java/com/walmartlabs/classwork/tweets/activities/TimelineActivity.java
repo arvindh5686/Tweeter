@@ -75,8 +75,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
         RequestParams params = new RequestParams();
         params.put("count", 25);
         params.put("since_id", 1);
-
-        fetchAndPopulateTimeline(params);
+        fetchAndPopulateTimeline(params, false);
     }
 
     private void setupListView() {
@@ -89,7 +88,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
                 RequestParams params = new RequestParams();
                 params.put("count", 25);
                 params.put("max_id", TimelineActivity.maxId);
-                fetchAndPopulateTimeline(params);
+                fetchAndPopulateTimeline(params, true);
                 return true;
             }
         });
@@ -132,9 +131,9 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
 
     }
 
-    private void fetchAndPopulateTimeline(RequestParams params) {
+    private void fetchAndPopulateTimeline(RequestParams params, boolean isScroll) {
         if (isNetworkAvailable()) {
-            clearCache();
+            if(! isScroll) clearCache();
             client.getTimeline(params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
