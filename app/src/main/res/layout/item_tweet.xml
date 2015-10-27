@@ -4,8 +4,7 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:background="@color/gray_color"
 android:layout_marginBottom="10dp"
-android:orientation="vertical"
-    >
+android:orientation="vertical">
 
 <RelativeLayout
     android:layout_width="match_parent"
@@ -29,14 +28,13 @@ android:orientation="vertical"
         android:layout_height="20dp"
         android:id="@+id/rightTop">
         <TextView
-            android:id="@+id/tvUserName"
+            android:id="@+id/tvName"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_centerVertical="true"
-            android:textStyle="bold"
-            android:text="test" />
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -46,6 +44,16 @@ android:orientation="vertical"
             android:id="@+id/tvRelativeTimeStamp"
             android:textStyle="normal"
             android:text="1h"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="\@test"
+            android:id="@+id/tvScreenName"
+            android:textSize="12dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tvName"
+            android:layout_toEndOf="@+id/tvName" />
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -56,8 +64,8 @@ android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tvBody"
+            android:textSize="12dp"
             android:textStyle="normal"
-            android:text="Body"
             android:autoLink="all"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true" />
@@ -70,8 +78,8 @@ android:orientation="vertical"
         android:layout_below="@+id/rightMiddle">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:id="@+id/ivRetweet"
             android:layout_alignParentLeft="true"
             android:src="@drawable/ic_retweet"

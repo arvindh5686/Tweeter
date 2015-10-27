@@ -1,6 +1,7 @@
 package com.walmartlabs.classwork.tweets.fragments;
 
 import android.app.Dialog;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,7 +22,9 @@ import android.widget.TextView;
 import com.codepath.apps.tweets.R;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 import com.walmartlabs.classwork.tweets.activities.TimelineActivity;
 import com.walmartlabs.classwork.tweets.main.TwitterApplication;
 import com.walmartlabs.classwork.tweets.models.Tweet;
@@ -73,9 +76,18 @@ public class EditNameDialog extends DialogFragment {
         client = TwitterApplication.getRestClient();
         final View view = inflater.inflate(R.layout.fragment_compose_tweet, container);
         //hardcoding my profile image by default until verify_credentials api works
+
+        Transformation transformation = new RoundedTransformationBuilder()
+                .borderColor(Color.BLACK)
+                .borderWidthDp(0)
+                .cornerRadiusDp(10)
+                .oval(true)
+                .build();
+
         ImageView ivProfileImage = (ImageView) view.findViewById(R.id.ivProfileImage);
         Picasso.with(getContext()).
                 load(Uri.parse(getString(R.string.current_user_profile_image)))
+                .transform(transformation)
                 .into(ivProfileImage);
 
         final Button btnTweet = (Button) view.findViewById(R.id.btnTweet);
@@ -115,9 +127,6 @@ public class EditNameDialog extends DialogFragment {
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         dismiss();
                         Tweet postResponse = Tweet.fromJson(response);
-                        Log.i("imageurl", postResponse.getUser().getProfileImageUrl());
-                        Log.i("name", postResponse.getUser().getName());
-                        Log.i("screenname", postResponse.getUser().getScreenName());
                         postResponse.getUser().getName();
                         postResponse.getUser().getScreenName();
                         TimelineActivity activity = (TimelineActivity) getActivity();

@@ -31,7 +31,8 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
     // View lookup cache
     private static class ViewHolder {
         public ImageView ivProfileImage;
-        public TextView tvUserName;
+        public TextView tvScreenName;
+        public TextView tvName;
         public TextView tvBody;
         public TextView tvRelativeTimeStamp;
     }
@@ -53,15 +54,25 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
             LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.item_tweet, parent, false);
             viewHolder.ivProfileImage = (ImageView)convertView.findViewById(R.id.ivProfileImage);
-            viewHolder.tvUserName = (TextView)convertView.findViewById(R.id.tvUserName);
+            viewHolder.tvScreenName = (TextView)convertView.findViewById(R.id.tvScreenName);
+            viewHolder.tvName = (TextView)convertView.findViewById(R.id.tvName);
             viewHolder.tvBody = (TextView)convertView.findViewById(R.id.tvBody);
             viewHolder.tvRelativeTimeStamp = (TextView)convertView.findViewById(R.id.tvRelativeTimeStamp);
+
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+
+        if (position % 2 == 1) {
+            convertView.setBackgroundColor(Color.parseColor("#f1f1f1"));
+        } else {
+            convertView.setBackgroundColor(Color.parseColor("#fafafa"));
+        }
+
         // Populate data into the template view using the data object
-        viewHolder.tvUserName.setText(Html.fromHtml(tweet.getUser().getName()));
+        viewHolder.tvScreenName.setText(Html.fromHtml("@" + tweet.getUser().getScreenName()));
+        viewHolder.tvName.setText(Html.fromHtml(tweet.getUser().getName()));
         viewHolder.tvBody.setText(Html.fromHtml(tweet.getBody()));
 
         try {
