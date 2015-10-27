@@ -37,7 +37,7 @@ import org.json.JSONObject;
 /**
  * Created by abalak5 on 10/23/15.
  */
-public class EditNameDialog extends DialogFragment {
+public class ComposeTweetDialog extends DialogFragment {
 
     private EditText etMessage;
     private TwitterClient client;
@@ -50,20 +50,20 @@ public class EditNameDialog extends DialogFragment {
     }
 
 
-    public EditNameDialog() {
+    public ComposeTweetDialog() {
         // Empty constructor is required for DialogFragment
         // Make sure not to add arguments to the constructor
         // Use `newInstance` instead as shown below
     }
 
-    public static EditNameDialog newInstance(String title, Tweet tweet) {
+    public static ComposeTweetDialog newInstance(String title, Tweet tweet) {
         if (tweet != null) {
             isReply = true;
             inReplyToTweet = tweet;
         } else {
             isReply = false;
         }
-        EditNameDialog frag = new EditNameDialog();
+        ComposeTweetDialog frag = new ComposeTweetDialog();
         Bundle args = new Bundle();
         args.putString("title", title);
         if (tweet != null) args.putString("screenname", tweet.getUser().getScreenName());

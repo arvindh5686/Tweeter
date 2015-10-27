@@ -23,7 +23,7 @@ import com.codepath.apps.tweets.R;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.walmartlabs.classwork.tweets.adapters.TweetsAdapter;
-import com.walmartlabs.classwork.tweets.fragments.EditNameDialog;
+import com.walmartlabs.classwork.tweets.fragments.ComposeTweetDialog;
 import com.walmartlabs.classwork.tweets.main.TwitterApplication;
 import com.walmartlabs.classwork.tweets.models.Tweet;
 import com.walmartlabs.classwork.tweets.net.TwitterClient;
@@ -36,7 +36,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TimelineActivity extends AppCompatActivity implements EditNameDialog.EditNameDialogListener {
+public class TimelineActivity extends AppCompatActivity implements ComposeTweetDialog.EditNameDialogListener {
 
     private TwitterClient client;
     private TweetsAdapter aTweets;
@@ -44,7 +44,7 @@ public class TimelineActivity extends AppCompatActivity implements EditNameDialo
     private ListView lvTweets;
     public static long maxId;
     public static long sinceId;
-    private EditNameDialog editNameDialog;
+    private ComposeTweetDialog composeTweetDialog;
 
     private SwipeRefreshLayout swipeContainer;
 
@@ -177,8 +177,8 @@ public class TimelineActivity extends AppCompatActivity implements EditNameDialo
         //noinspection SimplifiableIfStatement
         if (id == R.id.compose_tweet) {
             FragmentManager fm = getSupportFragmentManager();
-            editNameDialog = EditNameDialog.newInstance("Some Title", null);
-            editNameDialog.show(fm, "fragment_compose_tweet");
+            composeTweetDialog = ComposeTweetDialog.newInstance("Some Title", null);
+            composeTweetDialog.show(fm, "fragment_compose_tweet");
         }
 
         return super.onOptionsItemSelected(item);

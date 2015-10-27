@@ -13,12 +13,12 @@ import android.widget.TextView;
 
 import com.codepath.apps.tweets.R;
 import com.squareup.picasso.Picasso;
-import com.walmartlabs.classwork.tweets.fragments.EditNameDialog;
+import com.walmartlabs.classwork.tweets.fragments.ComposeTweetDialog;
 import com.walmartlabs.classwork.tweets.models.Tweet;
 
-public class DetailedViewActivity extends AppCompatActivity implements EditNameDialog.EditNameDialogListener {
+public class DetailedViewActivity extends AppCompatActivity implements ComposeTweetDialog.EditNameDialogListener {
 
-    private EditNameDialog editNameDialog;
+    private ComposeTweetDialog composeTweetDialog;
     private Tweet tweet;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +64,8 @@ public class DetailedViewActivity extends AppCompatActivity implements EditNameD
 
     public void replyToTweet(View view) {
         FragmentManager fm = getSupportFragmentManager();
-        editNameDialog = EditNameDialog.newInstance("Some Title", tweet);
-        editNameDialog.show(fm, "fragment_compose_tweet");
+        composeTweetDialog = ComposeTweetDialog.newInstance("Some Title", tweet);
+        composeTweetDialog.show(fm, "fragment_compose_tweet");
     }
 
     @Override
