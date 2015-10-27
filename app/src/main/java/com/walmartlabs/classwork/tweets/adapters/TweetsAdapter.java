@@ -1,6 +1,7 @@
 package com.walmartlabs.classwork.tweets.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -11,7 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.tweets.R;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 import com.walmartlabs.classwork.tweets.models.Tweet;
 
 import java.text.ParseException;
@@ -69,12 +72,22 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
             Date tweetDate = getTimeStamp(tweet.getCreatedAt());
             String timeStamp = getRelativeTimeStamp(currDate, tweetDate);
             viewHolder.tvRelativeTimeStamp.setText(timeStamp);
-            //viewHolder.tvRelativeTimeStamp.sett(getTimeStamp(tweet.getCreatedAt()));
+            Transformation transformation = new RoundedTransformationBuilder()
+                    .borderColor(Color.BLACK)
+                    //.borderWidthDp(0)
+                    .cornerRadiusDp(10)
+                    .oval(false)
+                    .build();
+
+            Picasso.with(getContext())
+                    .load(Uri.parse(tweet.getUser().getProfileImageUrl()))
+                /*.placeholder(R.drawable.ic_nocover)*/
+                    .transform(transformation)
+                    .into(viewHolder.ivProfileImage);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        Picasso.with(getContext()).load(Uri.parse(tweet.getUser().getProfileImageUrl()))/*.placeholder(R.drawable.ic_nocover)*/.into(viewHolder.ivProfileImage);
         // Return the completed view to render on screen
         return convertView;
     }

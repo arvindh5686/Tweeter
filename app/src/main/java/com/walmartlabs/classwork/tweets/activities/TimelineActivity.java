@@ -1,6 +1,8 @@
 package com.walmartlabs.classwork.tweets.activities;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import com.activeandroid.ActiveAndroid;
 import com.activeandroid.query.Select;
 import com.codepath.apps.tweets.R;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -45,6 +48,7 @@ public class TimelineActivity extends AppCompatActivity implements EditNameDialo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActiveAndroid.setLoggingEnabled(true);
         setContentView(R.layout.activity_timeline);
         client = TwitterApplication.getRestClient();
         tweets = new ArrayList<Tweet>();
@@ -58,7 +62,7 @@ public class TimelineActivity extends AppCompatActivity implements EditNameDialo
             public void onRefresh() {
                 RequestParams params = new RequestParams();
                 params.put("count", 25);
-                params.put("since_id", sinceId + 1);
+                params.put("since_id", 1);
                 Log.i("sinceId", Long.toString(sinceId));
                 fetchAndUpdateFeed(params);
             }
@@ -67,10 +71,14 @@ public class TimelineActivity extends AppCompatActivity implements EditNameDialo
         RequestParams params = new RequestParams();
         params.put("count", 25);
         params.put("since_id", 1);
+
         fetchAndPopulateTimeline(params);
     }
 
     private void setupListView() {
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#4FAAF1")));
+
         lvTweets.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public boolean onLoadMore(int page, int totalItemsCount) {
@@ -84,25 +92,29 @@ public class TimelineActivity extends AppCompatActivity implements EditNameDialo
     }
 
     private void fetchAndUpdateFeed(RequestParams params) {
-        client.getTimeline(params, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                if (response.length() == 0) return;
-                ArrayList<Tweet> tweets = Tweet.fromJsonArray(response);
-                ArrayList<Tweet> existingTweets = tweets;
-                aTweets.clear();
-                aTweets.addAll(tweets);
-                aTweets.addAll(existingTweets);
-                Log.d("Success", response.toString());
-                swipeContainer.setRefreshing(false);
-            }
+        if(isNetworkAvailable()) {
+            client.getTimeline(params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                    if (response.length() == 0) return;
+                    ArrayList<Tweet> tweets = Tweet.fromJsonArray(response);
+                    aTweets.clear();
+                    aTweets.addAll(tweets);
+                    Log.d("Success", response.toString());
+                    swipeContainer.setRefreshing(false);
+                }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("Failure", errorResponse.toString());
-                swipeContainer.setRefreshing(false);
-            }
-        });
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    Log.d("Failure", errorResponse.toString());
+                    swipeContainer.setRefreshing(false);
+                }
+            });
+        } else {
+            getFromCache();
+            swipeContainer.setRefreshing(false);
+        }
+
     }
 
     private void fetchAndPopulateTimeline(RequestParams params) {
@@ -121,13 +133,18 @@ public class TimelineActivity extends AppCompatActivity implements EditNameDialo
                 }
             });
         } else {
-            List<Tweet> tweets  = new Select()
-                    .from(Tweet.class)
-                    .orderBy("uid DESC")
-                    .execute();
-            aTweets.clear();
-            aTweets.addAll(tweets);
+            getFromCache();
         }
+    }
+
+    public void getFromCache() {
+        List<Tweet> tweets  = new Select()
+                .from(Tweet.class)
+                .orderBy("uid DESC")
+                .execute();
+        aTweets.clear();
+        aTweets.notifyDataSetChanged();
+        aTweets.addAll(tweets);
     }
 
     @Override
