@@ -55,6 +55,10 @@
             android:name="com.walmartlabs.classwork.tweets.activities.DetailedViewActivity"
             android:label="@string/title_activity_detailed_view" >
         </activity>
+        <activity
+            android:name="com.walmartlabs.classwork.tweets.activities.ProfileActivity"
+            android:label="@string/title_activity_profile" >
+        </activity>
     </application>
 
 </manifest>

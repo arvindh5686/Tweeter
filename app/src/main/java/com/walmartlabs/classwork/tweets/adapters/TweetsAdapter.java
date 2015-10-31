@@ -73,7 +73,7 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
         // Populate data into the template view using the data object
         viewHolder.tvScreenName.setText(Html.fromHtml("@" + tweet.getUser().getScreenName()));
         viewHolder.tvName.setText(Html.fromHtml(tweet.getUser().getName()));
-        viewHolder.tvBody.setText(Html.fromHtml(tweet.getBody()));
+        viewHolder.tvBody.setText(tweet.getBody());
 
         try {
             SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");

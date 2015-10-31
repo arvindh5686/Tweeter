@@ -34,9 +34,14 @@ public class TwitterClient extends OAuthBaseClient {
 
 	//statuses/home_timeline.json
 
-	public void getTimeline(RequestParams params, AsyncHttpResponseHandler handler) {
-		String timelineUrl = getApiUrl("statuses/home_timeline.json");
-		getClient().get(timelineUrl, params, handler);
+	public void getHomeTimeline(RequestParams params, AsyncHttpResponseHandler handler) {
+		String url = getApiUrl("statuses/home_timeline.json");
+		getClient().get(url, params, handler);
+	}
+
+	public void getMentionsTimeline(RequestParams params, AsyncHttpResponseHandler handler) {
+		String url = getApiUrl("statuses/mentions_timeline.json");
+		getClient().get(url, params, handler);
 	}
 
 	public void postTweet(RequestParams params, AsyncHttpResponseHandler handler) {
@@ -44,9 +49,17 @@ public class TwitterClient extends OAuthBaseClient {
 		getClient().post(postTweetUrl, params, handler);
 	}
 
-    public void getCurrentUserInfo(RequestParams params, AsyncHttpResponseHandler handler) {
-        String postTweetUrl = getApiUrl("account/verify_credentials.json");
-        getClient().get(postTweetUrl, params, handler);
+    public void getCurrentUserInfo(AsyncHttpResponseHandler handler) {
+        String url = getApiUrl("account/verify_credentials.json");
+        getClient().get(url, null, handler);
+    }
+
+    public void getUserTimeline(String screenName, AsyncHttpResponseHandler handler) {
+        String url = getApiUrl("statuses/user_timeline.json");
+        RequestParams params = new RequestParams();
+        params.put("count", 25);
+        params.put("screen_name", screenName);
+        getClient().get(url, params, handler);
     }
 
 	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
