@@ -16,6 +16,7 @@ import com.codepath.apps.tweets.R;
 import com.walmartlabs.classwork.tweets.adapters.TweetsAdapter;
 import com.walmartlabs.classwork.tweets.models.Tweet;
 import com.walmartlabs.classwork.tweets.models.User;
+import com.walmartlabs.classwork.tweets.util.EndlessScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +24,11 @@ import java.util.List;
 /**
  * Created by abalak5 on 10/30/15.
  */
-public class TweetsListFragment extends Fragment{
+public abstract class TweetsListFragment extends Fragment{
     private TweetsAdapter aTweets;
     private ArrayList<Tweet> tweets;
     private ListView lvTweets;
-    public static long maxId;
-    public static long sinceId;
+
     private SwipeRefreshLayout swipeContainer;
 
     @Override
@@ -42,7 +42,19 @@ public class TweetsListFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tweets_list, container, false);
         lvTweets = (ListView) view.findViewById(R.id.lvTweets);
+        lvTweets.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+/*                RequestParams params = new RequestParams();
+                params.put("count", 25);
+                params.put("max_id", maxId);*/
+                fetchAndPopulateTimeline(false);
+                return true;
+            }
+        });
+        
         lvTweets.setAdapter(aTweets);
+
 
         /*swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -80,4 +92,10 @@ public class TweetsListFragment extends Fragment{
     public void addAll(List<Tweet> tweets) {
         aTweets.addAll(tweets);
     }
+
+    public void clear() {
+        aTweets.clear();
+    }
+
+    protected abstract void fetchAndPopulateTimeline(boolean clearCache);
 }

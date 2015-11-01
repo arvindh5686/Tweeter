@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 import com.walmartlabs.classwork.tweets.main.TwitterApplication;
 import com.walmartlabs.classwork.tweets.models.Tweet;
 import com.walmartlabs.classwork.tweets.net.TwitterClient;
@@ -20,12 +19,16 @@ import java.util.ArrayList;
  */
 public class UserTimelineFragment extends TweetsListFragment {
     private TwitterClient client;
+    public static long maxId;
+    public static long sinceId = 1;
 
     public static UserTimelineFragment newInstance(String screenName) {
         UserTimelineFragment fragment = new UserTimelineFragment();
         Bundle args = new Bundle();
         args.putString("screen_name", screenName);
         fragment.setArguments(args);
+        sinceId = 1;
+        maxId = 0;
         return fragment;
     }
 
@@ -34,10 +37,7 @@ public class UserTimelineFragment extends TweetsListFragment {
         super.onCreate(savedInstanceState);
         client = TwitterApplication.getRestClient();
         //setupListView();
-        RequestParams params = new RequestParams();
-        params.put("count", 25);
-        params.put("since_id", 1);
-        fetchAndPopulateTimeline(false);
+        fetchAndPopulateTimeline(true);
     }
 
 /*
@@ -91,14 +91,19 @@ public class UserTimelineFragment extends TweetsListFragment {
 
     }*/
 
-    private void fetchAndPopulateTimeline(boolean isScroll) {
+    @Override
+    public void fetchAndPopulateTimeline(boolean clearCache) {
         if (isNetworkAvailable()) {
-            if (!isScroll) clearCache();
+            if (clearCache) clear();
             String screenName = getArguments().getString("screen_name");
-            client.getUserTimeline(screenName, new JsonHttpResponseHandler() {
+            client.getUserTimeline(sinceId, maxId, screenName, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                     ArrayList<Tweet> tweets = Tweet.fromJsonArray(response);
+                    if (tweets.size() > 0) {
+                        //get last tweets uid and subtract one as max_id is inclusive
+                        maxId = tweets.get(tweets.size() - 1).getUid() - 1;
+                    }
                     addAll(tweets);
                     Log.d("Success", response.toString());
                 }

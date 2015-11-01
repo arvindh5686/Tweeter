@@ -148,8 +148,4 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
 
         return timeStamp;
     }
-
-    public interface ProfileImageClickListener {
-        public void onProfileView(String screenName);
-    }
 }

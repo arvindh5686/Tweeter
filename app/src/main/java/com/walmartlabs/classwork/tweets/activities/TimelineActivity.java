@@ -12,14 +12,12 @@ import android.view.MenuItem;
 import com.activeandroid.ActiveAndroid;
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.tweets.R;
-import com.walmartlabs.classwork.tweets.adapters.TweetsAdapter;
 import com.walmartlabs.classwork.tweets.adapters.TweetsPagerAdapter;
 import com.walmartlabs.classwork.tweets.fragments.ComposeTweetDialog;
 import com.walmartlabs.classwork.tweets.fragments.TweetsListFragment;
 import com.walmartlabs.classwork.tweets.models.Tweet;
 
-public class TimelineActivity extends BaseActivity implements ComposeTweetDialog.EditNameDialogListener,
-        TweetsAdapter.ProfileImageClickListener {
+public class TimelineActivity extends BaseActivity implements ComposeTweetDialog.EditNameDialogListener {
 
 
     private TweetsListFragment tweetsListFragment;

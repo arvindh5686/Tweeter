@@ -84,12 +84,7 @@ public class Tweet extends Model implements Parcelable {
             }
         }
 
-        if (tweets.size() > 0) {
-            //get last tweets uid and subtract one as max_id is inclusive
-            TweetsListFragment.maxId = tweets.get(tweets.size() - 1).getUid() - 1;
-            //get first tweets uid and use as is as since_id is not inclusive
-            TweetsListFragment.sinceId = tweets.get(0).getUid();
-        }
+
 
         return tweets;
     }

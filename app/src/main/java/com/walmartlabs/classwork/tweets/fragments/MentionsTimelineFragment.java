@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 import com.walmartlabs.classwork.tweets.main.TwitterApplication;
 import com.walmartlabs.classwork.tweets.models.Tweet;
 import com.walmartlabs.classwork.tweets.net.TwitterClient;
@@ -21,15 +20,17 @@ import java.util.ArrayList;
 public class MentionsTimelineFragment extends TweetsListFragment {
 
     private TwitterClient client;
+    public static long maxId;
+    public static long sinceId = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         client = TwitterApplication.getRestClient();
         //setupListView();
-        RequestParams params = new RequestParams();
-        params.put("count", 25);
-        fetchAndPopulateTimeline(params, false);
+        sinceId = 1;
+        maxId = 0;
+        fetchAndPopulateTimeline(true);
     }
 
 /*
@@ -83,13 +84,18 @@ public class MentionsTimelineFragment extends TweetsListFragment {
 
     }*/
 
-    private void fetchAndPopulateTimeline(RequestParams params, boolean isScroll) {
+    @Override
+    public void fetchAndPopulateTimeline(boolean clearCache) {
         if (isNetworkAvailable()) {
-            if(! isScroll) clearCache();
-            client.getMentionsTimeline(params, new JsonHttpResponseHandler() {
+            if(clearCache) clear();
+            client.getMentionsTimeline(sinceId, maxId, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                     ArrayList<Tweet> tweets = Tweet.fromJsonArray(response);
+                    if (tweets.size() > 0) {
+                        //get last tweets uid and subtract one as max_id is inclusive
+                        maxId = tweets.get(tweets.size() - 1).getUid() - 1;
+                    }
                     addAll(tweets);
                     Log.d("Success", response.toString());
                 }
