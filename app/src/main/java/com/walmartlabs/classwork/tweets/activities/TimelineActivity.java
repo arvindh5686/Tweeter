@@ -4,24 +4,22 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.activeandroid.ActiveAndroid;
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.tweets.R;
+import com.walmartlabs.classwork.tweets.adapters.TweetsAdapter;
+import com.walmartlabs.classwork.tweets.adapters.TweetsPagerAdapter;
 import com.walmartlabs.classwork.tweets.fragments.ComposeTweetDialog;
-import com.walmartlabs.classwork.tweets.fragments.HomeTimelineFragment;
-import com.walmartlabs.classwork.tweets.fragments.MentionsTimelineFragment;
 import com.walmartlabs.classwork.tweets.fragments.TweetsListFragment;
 import com.walmartlabs.classwork.tweets.models.Tweet;
 
-public class TimelineActivity extends AppCompatActivity implements ComposeTweetDialog.EditNameDialogListener {
+public class TimelineActivity extends BaseActivity implements ComposeTweetDialog.EditNameDialogListener,
+        TweetsAdapter.ProfileImageClickListener {
 
 
     private TweetsListFragment tweetsListFragment;
@@ -67,8 +65,6 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
         return super.onOptionsItemSelected(item);
     }
 
-
-
     @Override
     public void onFinishEditDialog(Tweet tweet) {
         /*tweets.add(0, tweet);
@@ -78,35 +74,5 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetD
     public void onProfileView(MenuItem item) {
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
-    }
-
-    //return the order of the fragments in the view pager
-    public class TweetsPagerAdapter extends FragmentPagerAdapter {
-        private String tabTitles[] = { "Home", "Mentions" };
-
-        public TweetsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            if (position == 0) {
-                return new HomeTimelineFragment();
-            } else if (position == 1){
-                return new MentionsTimelineFragment();
-            } else {
-                return null;
-            }
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return tabTitles[position];
-        }
-
-        @Override
-        public int getCount() {
-            return tabTitles.length;
-        }
     }
 }

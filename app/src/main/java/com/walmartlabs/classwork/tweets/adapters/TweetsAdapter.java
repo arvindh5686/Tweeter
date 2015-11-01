@@ -15,6 +15,7 @@ import com.codepath.apps.tweets.R;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
+import com.walmartlabs.classwork.tweets.activities.BaseActivity;
 import com.walmartlabs.classwork.tweets.models.Tweet;
 
 import java.text.ParseException;
@@ -28,6 +29,7 @@ import java.util.TimeZone;
  * Created by abalak5 on 10/21/15.
  */
 public class TweetsAdapter extends ArrayAdapter<Tweet> {
+    public BaseActivity activity;
     // View lookup cache
     private static class ViewHolder {
         public ImageView ivProfileImage;
@@ -39,12 +41,13 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
 
     public TweetsAdapter(Context context, List<Tweet> objects) {
         super(context, 0, objects);
+        this.activity = (BaseActivity) context;
     }
 
     // Translates a particular `Image` given a position
     // into a relevant row within an AdapterView
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, final ViewGroup parent) {
         // Get the data item for this position
         final Tweet tweet = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
@@ -70,10 +73,17 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
             convertView.setBackgroundColor(Color.parseColor("#fafafa"));
         }
 
+        final String screenName = tweet.getUser().getScreenName();
         // Populate data into the template view using the data object
         viewHolder.tvScreenName.setText(Html.fromHtml("@" + tweet.getUser().getScreenName()));
         viewHolder.tvName.setText(Html.fromHtml(tweet.getUser().getName()));
         viewHolder.tvBody.setText(tweet.getBody());
+        viewHolder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.onProfileView(screenName);
+            }
+        });
 
         try {
             SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
@@ -137,5 +147,9 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
         timeStamp += elapsedSeconds > 0 && timeStamp.equalsIgnoreCase("") ? Long.toString(elapsedSeconds) + "s" : "";
 
         return timeStamp;
+    }
+
+    public interface ProfileImageClickListener {
+        public void onProfileView(String screenName);
     }
 }

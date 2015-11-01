@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -23,33 +22,37 @@ import com.walmartlabs.classwork.tweets.net.TwitterClient;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends BaseActivity {
 
     private TwitterClient client;
     private User user;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         client = TwitterApplication.getRestClient();
-
-        client.getCurrentUserInfo(new JsonHttpResponseHandler() {
+        final String screenName = getIntent().getStringExtra("screen_name");
+        client.getUserProfile(screenName, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 user = User.fromJson(response);
                 getSupportActionBar().setTitle("@" + user.getScreenName());
                 populateProfileHeader(user);
+
+                if (savedInstanceState == null) {
+                    UserTimelineFragment userTimelineFragment = UserTimelineFragment.newInstance(screenName);
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    ft.replace(R.id.flContainer, userTimelineFragment);
+                    ft.commit();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
             }
         });
 
-        String screenName = getIntent().getStringExtra("screen_name");
-
-        if (savedInstanceState == null) {
-            UserTimelineFragment userTimelineFragment = UserTimelineFragment.newInstance(screenName);
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.flContainer, userTimelineFragment);
-            ft.commit();
-        }
     }
 
     private void populateProfileHeader(User user) {
