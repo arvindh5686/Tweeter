@@ -1,6 +1,7 @@
 package com.walmartlabs.classwork.tweets.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -9,10 +10,12 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.activeandroid.query.Delete;
 import com.codepath.apps.tweets.R;
+import com.walmartlabs.classwork.tweets.activities.DetailedViewActivity;
 import com.walmartlabs.classwork.tweets.adapters.TweetsAdapter;
 import com.walmartlabs.classwork.tweets.models.Tweet;
 import com.walmartlabs.classwork.tweets.models.User;
@@ -52,21 +55,31 @@ public abstract class TweetsListFragment extends Fragment{
                 return true;
             }
         });
+
+        lvTweets.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(getActivity(), DetailedViewActivity.class);
+                Tweet tweet = (Tweet) aTweets.getItem(position);
+                i.putExtra("tweet", tweet);
+                startActivity(i);
+            }
+        });
+
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                aTweets.clear();
+                fetchAndPopulateTimeline(true);
+                swipeContainer.setRefreshing(false);
+            }
+        });
         
         lvTweets.setAdapter(aTweets);
 
 
-        /*swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                RequestParams params = new RequestParams();
-                params.put("count", 25);
-                params.put("since_id", 1);
-                Log.i("sinceId", Long.toString(sinceId));
-                fetchAndUpdateFeed(params);
-            }
-        });*/
+        /**/
         return view;
     }
 

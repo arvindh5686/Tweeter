@@ -35,15 +35,7 @@ public class HomeTimelineFragment extends TweetsListFragment {
 
 /*
     private void setupListView() {
-        lvTweets.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(getActivity(), DetailedViewActivity.class);
-                Tweet tweet = (Tweet) aTweets.getItem(position);
-                i.putExtra("tweet", tweet);
-                startActivity(i);
-            }
-        });
+
     }*/
 
 /*    private void fetchAndUpdateFeed(RequestParams params) {
@@ -76,7 +68,11 @@ public class HomeTimelineFragment extends TweetsListFragment {
     @Override
     public void fetchAndPopulateTimeline(boolean clearCache) {
         if (isNetworkAvailable()) {
-            if(clearCache) clear();
+            if (clearCache) {
+                sinceId = 1;
+                maxId = 0;
+                clear();
+            }
             client.getHomeTimeline(sinceId, maxId, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {

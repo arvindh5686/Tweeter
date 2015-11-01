@@ -19,8 +19,8 @@ import java.util.ArrayList;
  */
 public class UserTimelineFragment extends TweetsListFragment {
     private TwitterClient client;
-    public static long maxId;
-    public static long sinceId = 1;
+    private static long maxId;
+    private static long sinceId = 1;
 
     public static UserTimelineFragment newInstance(String screenName) {
         UserTimelineFragment fragment = new UserTimelineFragment();
@@ -94,7 +94,11 @@ public class UserTimelineFragment extends TweetsListFragment {
     @Override
     public void fetchAndPopulateTimeline(boolean clearCache) {
         if (isNetworkAvailable()) {
-            if (clearCache) clear();
+            if (clearCache) {
+                sinceId = 1;
+                maxId = 0;
+                clear();
+            }
             String screenName = getArguments().getString("screen_name");
             client.getUserTimeline(sinceId, maxId, screenName, new JsonHttpResponseHandler() {
                 @Override

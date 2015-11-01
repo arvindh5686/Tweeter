@@ -87,7 +87,11 @@ public class MentionsTimelineFragment extends TweetsListFragment {
     @Override
     public void fetchAndPopulateTimeline(boolean clearCache) {
         if (isNetworkAvailable()) {
-            if(clearCache) clear();
+            if (clearCache) {
+                sinceId = 1;
+                maxId = 0;
+                clear();
+            }
             client.getMentionsTimeline(sinceId, maxId, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
