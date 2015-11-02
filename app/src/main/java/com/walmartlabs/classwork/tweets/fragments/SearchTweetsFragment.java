@@ -20,8 +20,6 @@ import java.util.ArrayList;
 public class SearchTweetsFragment extends TweetsListFragment {
 
     private TwitterClient client;
-    public static long maxId;
-    public static long sinceId = 1;
 
     public static SearchTweetsFragment newInstance(String query) {
         SearchTweetsFragment fragment = new SearchTweetsFragment();
@@ -35,21 +33,12 @@ public class SearchTweetsFragment extends TweetsListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         client = TwitterApplication.getRestClient();
-        //setupListView();
-        sinceId = 1;
-        maxId = 0;
-        fetchAndPopulateTimeline(true);
+        fetchAndPopulateTimeline();
     }
 
     @Override
-    public void fetchAndPopulateTimeline(boolean clearCache) {
+    public void fetchAndPopulateTimeline() {
         if (isNetworkAvailable()) {
-            if (clearCache) {
-                sinceId = 1;
-                maxId = 0;
-                clear();
-            }
-
             String query = getArguments().getString("query");
             client.getSearchResults(sinceId, maxId, query, new JsonHttpResponseHandler() {
                 @Override
@@ -66,7 +55,6 @@ public class SearchTweetsFragment extends TweetsListFragment {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
 
                 @Override

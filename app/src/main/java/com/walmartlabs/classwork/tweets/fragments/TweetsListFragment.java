@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,16 @@ import android.widget.ListView;
 
 import com.activeandroid.query.Delete;
 import com.codepath.apps.tweets.R;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.walmartlabs.classwork.tweets.activities.DetailedViewActivity;
 import com.walmartlabs.classwork.tweets.adapters.TweetsAdapter;
 import com.walmartlabs.classwork.tweets.models.Tweet;
 import com.walmartlabs.classwork.tweets.models.User;
 import com.walmartlabs.classwork.tweets.util.EndlessScrollListener;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,12 +37,16 @@ public abstract class TweetsListFragment extends Fragment{
     private TweetsAdapter aTweets;
     private ArrayList<Tweet> tweets;
     private ListView lvTweets;
+    protected static long maxId;
+    protected static long sinceId = 1;
 
     private SwipeRefreshLayout swipeContainer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sinceId = 1;
+        maxId = 0;
         tweets = new ArrayList<Tweet>();
         aTweets = new TweetsAdapter(getActivity(), tweets);
     }
@@ -48,10 +58,7 @@ public abstract class TweetsListFragment extends Fragment{
         lvTweets.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public boolean onLoadMore(int page, int totalItemsCount) {
-/*                RequestParams params = new RequestParams();
-                params.put("count", 25);
-                params.put("max_id", maxId);*/
-                fetchAndPopulateTimeline(false);
+                fetchAndPopulateTimeline();
                 return true;
             }
         });
@@ -70,16 +77,16 @@ public abstract class TweetsListFragment extends Fragment{
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                sinceId = 1;
+                maxId = 0;
                 aTweets.clear();
-                fetchAndPopulateTimeline(true);
+                fetchAndPopulateTimeline();
                 swipeContainer.setRefreshing(false);
             }
         });
         
         lvTweets.setAdapter(aTweets);
 
-
-        /**/
         return view;
     }
 
@@ -110,10 +117,32 @@ public abstract class TweetsListFragment extends Fragment{
         aTweets.clear();
     }
 
-    protected abstract void fetchAndPopulateTimeline(boolean clearCache);
+    protected abstract void fetchAndPopulateTimeline();
 
     public void onFinishEditDialog(Tweet tweet) {
         tweets.add(0, tweet);
         aTweets.notifyDataSetChanged();
+    }
+
+    public JsonHttpResponseHandler getHandler() {
+        JsonHttpResponseHandler handler =  new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                ArrayList<Tweet> tweets = Tweet.fromJsonArray(response);
+                if (tweets.size() > 0) {
+                    //get last tweets uid and subtract one as max_id is inclusive
+                    maxId = tweets.get(tweets.size() - 1).getUid() - 1;
+                }
+                addAll(tweets);
+                Log.d("Success", response.toString());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("Failure", errorResponse.toString());
+            }
+        };
+
+        return handler;
     }
 }

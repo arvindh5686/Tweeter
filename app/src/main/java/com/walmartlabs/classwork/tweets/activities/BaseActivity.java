@@ -43,6 +43,5 @@ public class BaseActivity extends AppCompatActivity implements TweetActions {
 
     @Override
     public void reTweet(Tweet tweet) {
-        //  ((TimelineActivity) this.activity).retweet(tweet);
     }
 }

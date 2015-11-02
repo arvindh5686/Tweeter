@@ -59,7 +59,7 @@ android:orientation="vertical">
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="70dp"
         android:id="@+id/rightMiddle"
         android:layout_below="@+id/rightTop">
         <TextView
@@ -67,7 +67,7 @@ android:orientation="vertical">
             android:layout_height="wrap_content"
             android:id="@+id/tvBody"
             android:textSize="12dp"
-
+            android:autoLink="web"
             android:textStyle="normal"
             android:fontFamily="sans-serif"
             android:layout_alignParentLeft="true"
@@ -82,7 +82,8 @@ android:orientation="vertical">
         android:id="@+id/rightBottom"
         android:layout_below="@+id/rightLayout"
         android:layout_alignLeft="@+id/rightLayout"
-        android:layout_alignStart="@+id/rightLayout">
+        android:layout_alignStart="@+id/rightLayout"
+        >
 
         <ImageView
             android:layout_width="20dp"
@@ -91,7 +92,8 @@ android:orientation="vertical">
             android:src="@mipmap/ic_reply"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            />
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
