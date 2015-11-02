@@ -104,6 +104,15 @@ public class TwitterClient extends OAuthBaseClient {
         getClient().post(postReTweetUrl, null, handler);
     }
 
+    public void getSearchResults(long sinceId, long maxId, String query, AsyncHttpResponseHandler handler) {
+        String url = getApiUrl("search/tweets.json");
+        RequestParams params = new RequestParams();
+        params.put("q", query);
+        params.put("since_id", sinceId);
+        params.put("max_id", maxId);
+        getClient().get(url, params, handler);
+    }
+
 
 	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
 	 * 	  i.e getApiUrl("statuses/home_timeline.json");

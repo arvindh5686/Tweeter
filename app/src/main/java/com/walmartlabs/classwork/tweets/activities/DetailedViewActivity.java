@@ -85,15 +85,23 @@ public class DetailedViewActivity extends AppCompatActivity implements ComposeTw
     public void onFinishEditDialog(Tweet tweet) {
     }
 
-    public void retweet(View view) {
+    public void retweet(final View view) {
         client.postReTweet(tweet.getUid(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                changeRetweetIcon(view);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response) {
             }
         });
+    }
+
+    public void changeRetweetIcon(View view) {
+        Picasso.with(this)
+                .load(R.mipmap.ic_retweeted)
+                .into((ImageView) view);
+        view.setEnabled(false);
     }
 }
