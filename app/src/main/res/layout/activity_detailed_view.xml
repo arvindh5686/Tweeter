@@ -59,7 +59,9 @@
             android:id="@+id/ivRetweet"
             android:src="@drawable/ic_retweet"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:clickable="true"
+            android:onClick="retweet"/>
     </RelativeLayout>
 
     <RelativeLayout

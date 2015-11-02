@@ -14,17 +14,26 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.tweets.R;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 import com.walmartlabs.classwork.tweets.fragments.ComposeTweetDialog;
+import com.walmartlabs.classwork.tweets.main.TwitterApplication;
 import com.walmartlabs.classwork.tweets.models.Tweet;
+import com.walmartlabs.classwork.tweets.net.TwitterClient;
+
+import org.apache.http.Header;
+import org.json.JSONObject;
 
 public class DetailedViewActivity extends AppCompatActivity implements ComposeTweetDialog.EditNameDialogListener {
 
     private ComposeTweetDialog composeTweetDialog;
     private Tweet tweet;
+    private TwitterClient client;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        client = TwitterApplication.getRestClient();
         setContentView(R.layout.activity_detailed_view);
         Intent i = getIntent();
         tweet = i.getParcelableExtra("tweet");
@@ -74,6 +83,17 @@ public class DetailedViewActivity extends AppCompatActivity implements ComposeTw
 
     @Override
     public void onFinishEditDialog(Tweet tweet) {
+    }
 
+    public void retweet(View view) {
+        client.postReTweet(tweet.getUid(), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response) {
+            }
+        });
     }
 }
