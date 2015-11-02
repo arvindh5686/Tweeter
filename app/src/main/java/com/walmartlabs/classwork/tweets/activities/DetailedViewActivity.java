@@ -15,7 +15,9 @@ import android.widget.TextView;
 
 import com.codepath.apps.tweets.R;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 import com.walmartlabs.classwork.tweets.fragments.ComposeTweetDialog;
 import com.walmartlabs.classwork.tweets.main.TwitterApplication;
 import com.walmartlabs.classwork.tweets.models.Tweet;
@@ -41,10 +43,17 @@ public class DetailedViewActivity extends AppCompatActivity implements ComposeTw
         TextView tvScreenName = (TextView) findViewById(R.id.tvScreenName);
         TextView tvName = (TextView) findViewById(R.id.tvName);
         TextView tvBody = (TextView) findViewById(R.id.tvBody);
-        TextView tvRelativeTimeStamp = (TextView) findViewById(R.id.tvRelativeTimeStamp);
+
+        Transformation transformation = new RoundedTransformationBuilder()
+                .borderColor(Color.BLACK)
+                        //.borderWidthDp(0)
+                .cornerRadiusDp(10)
+                .oval(false)
+                .build();
 
         Picasso.with(this)
                 .load(Uri.parse(tweet.getUser().getProfileImageUrl()))
+                .transform(transformation)
                 .into(ivProfileImage);
         tvScreenName.setText("@" + tweet.getUser().getScreenName());
         tvName.setText(tweet.getUser().getName());

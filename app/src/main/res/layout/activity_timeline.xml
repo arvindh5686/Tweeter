@@ -12,7 +12,11 @@
         app:pstsShouldExpand="true"
         app:pstsTextAllCaps="true"
         android:layout_width="match_parent"
-        android:layout_height="48dp" />
+        android:layout_height="48dp"
+        android:textSize="14sp"
+        app:pstsDividerColor="#4FAAF1"
+        app:pstsIndicatorColor="#4FAAF1"
+        app:pstsTabPaddingLeftRight="14dp"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"

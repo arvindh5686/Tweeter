@@ -65,8 +65,8 @@ public class ProfileActivity extends BaseActivity {
         TextView tvTagline= (TextView) findViewById(R.id.tvTagline);
 
         tvName.setText(user.getName());
-        tvFollowers.setText(Integer.toString(user.getFollowersCount()) + " Followers");
-        tvFollowing.setText(Integer.toString(user.getFriendsCount()) + " Following");
+        tvFollowers.setText(Integer.toString(user.getFollowersCount()));
+        tvFollowing.setText(Integer.toString(user.getFriendsCount()));
         tvTagline.setText(user.getTagline());
 
         ImageView ivProfileImage = (ImageView) findViewById(R.id.ivProfileImage);

@@ -33,38 +33,6 @@ public class HomeTimelineFragment extends TweetsListFragment {
         fetchAndPopulateTimeline(true);
     }
 
-/*
-    private void setupListView() {
-
-    }*/
-
-/*    private void fetchAndUpdateFeed(RequestParams params) {
-        if(isNetworkAvailable()) {
-            clearCache();
-            client.getTimeline(params, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    if (response.length() == 0) return;
-                    ArrayList<Tweet> tweets = Tweet.fromJsonArray(response);
-                    aTweets.clear();
-                    addAll(tweets);
-                    Log.d("Success", response.toString());
-                    swipeContainer.setRefreshing(false);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    Log.d("Failure", errorResponse.toString());
-                    swipeContainer.setRefreshing(false);
-                }
-            });
-        } else {
-            getFromCache();
-            swipeContainer.setRefreshing(false);
-        }
-
-    }*/
-
     @Override
     public void fetchAndPopulateTimeline(boolean clearCache) {
         if (isNetworkAvailable()) {

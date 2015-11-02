@@ -67,8 +67,9 @@ android:orientation="vertical">
             android:layout_height="wrap_content"
             android:id="@+id/tvBody"
             android:textSize="12dp"
+            android:autoLink="web"
             android:textStyle="normal"
-
+            android:fontFamily="sans-serif"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true" />
 

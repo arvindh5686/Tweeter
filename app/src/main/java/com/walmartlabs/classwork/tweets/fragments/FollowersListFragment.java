@@ -43,6 +43,7 @@ public class FollowersListFragment extends UserListFragment {
                 try {
                     ArrayList<User> users = User.fromJsonArray(response.getJSONArray("users"));
                     Log.i("users", users.toString());
+                    getActivity().setTitle("Followers");
                     addAll(users);
                 } catch (JSONException e) {
                     e.printStackTrace();

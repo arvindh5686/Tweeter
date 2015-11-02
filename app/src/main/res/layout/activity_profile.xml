@@ -15,8 +15,8 @@
         android:id="@+id/rlUserHeader">
 
         <ImageView
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
             android:id="@+id/ivProfileImage"
             android:layout_marginRight="10dp"
             android:layout_alignParentTop="true"
@@ -27,18 +27,20 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name"
             android:id="@+id/tvName"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/ivProfileImage" />
+            android:layout_toRightOf="@+id/ivProfileImage"
+            android:textStyle="bold"
+            android:textSize="16dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tagline"
             android:id="@+id/tvTagline"
             android:layout_below="@+id/tvName"
-            android:layout_alignLeft="@+id/tvName" />
+            android:layout_alignLeft="@+id/tvName"
+            android:textSize="12dp"
+            android:fontFamily="Arial"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -46,23 +48,40 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/rlUserHeader"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="10dp"
         android:id="@+id/llCounts">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Followers"
+            android:text="0"
             android:id="@+id/tvFollowers"
+            android:clickable="true"
+            android:onClick="showFollowers"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" Followers"
             android:clickable="true"
             android:onClick="showFollowers"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Following"
+            android:text="0"
             android:layout_marginLeft="20dp"
             android:id="@+id/tvFollowing"
+            android:clickable="true"
+            android:onClick="showFriends"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" Following"
             android:clickable="true"
             android:onClick="showFriends"/>
 
