@@ -6,7 +6,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +25,7 @@ import com.walmartlabs.classwork.tweets.net.TwitterClient;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
-public class DetailedViewActivity extends AppCompatActivity implements ComposeTweetDialog.EditNameDialogListener {
+public class DetailedViewActivity extends BaseActivity implements ComposeTweetDialog.EditNameDialogListener {
 
     private ComposeTweetDialog composeTweetDialog;
     private Tweet tweet;

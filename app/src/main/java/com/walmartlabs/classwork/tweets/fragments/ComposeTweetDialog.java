@@ -25,8 +25,7 @@ import com.loopj.android.http.RequestParams;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
-import com.walmartlabs.classwork.tweets.activities.DetailedViewActivity;
-import com.walmartlabs.classwork.tweets.activities.TimelineActivity;
+import com.walmartlabs.classwork.tweets.activities.BaseActivity;
 import com.walmartlabs.classwork.tweets.main.TwitterApplication;
 import com.walmartlabs.classwork.tweets.models.Tweet;
 import com.walmartlabs.classwork.tweets.net.TwitterClient;
@@ -139,7 +138,7 @@ public class ComposeTweetDialog extends DialogFragment {
                 Log.i("status", status);
                 RequestParams params = new RequestParams();
                 params.put("status", status);
-                if(isReply) params.put("in_reply_to_status_id", inReplyToTweet.getUid());
+                if (isReply) params.put("in_reply_to_status_id", inReplyToTweet.getUid());
                 client.postTweet(params, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -147,13 +146,7 @@ public class ComposeTweetDialog extends DialogFragment {
                         Tweet postResponse = Tweet.fromJson(response);
                         postResponse.getUser().getName();
                         postResponse.getUser().getScreenName();
-                        if(isReply) {
-                            DetailedViewActivity activity = (DetailedViewActivity) getActivity();
-                            activity.onFinishEditDialog(postResponse);
-                        } else {
-                            TimelineActivity activity = (TimelineActivity) getActivity();
-                            activity.onFinishEditDialog(postResponse);
-                        }
+                        ((BaseActivity) getActivity()).onFinishEditDialog(postResponse);
                     }
 
                     @Override

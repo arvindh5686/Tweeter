@@ -85,6 +85,21 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
             }
         });
 
+        ImageView ivReply = (ImageView) convertView.findViewById(R.id.ivReply);
+        ivReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.replyToTweet(tweet);
+            }
+        });
+
+        ImageView ivRetweet = (ImageView) convertView.findViewById(R.id.ivRetweet);
+        ivRetweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.reTweet(tweet);
+            }
+        });
         try {
             SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
             String currDateStr = df.format(Calendar.getInstance().getTime());
@@ -112,6 +127,8 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
         // Return the completed view to render on screen
         return convertView;
     }
+
+
 
     public static Date getTimeStamp(String date) throws ParseException {
         final String TWITTER="EEE MMM dd HH:mm:ss z yyyy";

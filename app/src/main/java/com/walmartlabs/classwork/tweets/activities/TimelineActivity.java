@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -16,6 +17,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.tweets.R;
 import com.walmartlabs.classwork.tweets.adapters.TweetsPagerAdapter;
 import com.walmartlabs.classwork.tweets.fragments.ComposeTweetDialog;
+import com.walmartlabs.classwork.tweets.fragments.HomeTimelineFragment;
 import com.walmartlabs.classwork.tweets.fragments.TweetsListFragment;
 import com.walmartlabs.classwork.tweets.models.Tweet;
 
@@ -25,6 +27,7 @@ public class TimelineActivity extends BaseActivity implements ComposeTweetDialog
     private TweetsListFragment tweetsListFragment;
     private ComposeTweetDialog composeTweetDialog;
     private SearchView searchView;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +35,7 @@ public class TimelineActivity extends BaseActivity implements ComposeTweetDialog
         ActiveAndroid.setLoggingEnabled(true);
         setContentView(R.layout.activity_timeline);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
 
         PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
@@ -60,7 +63,6 @@ public class TimelineActivity extends BaseActivity implements ComposeTweetDialog
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
                 return false;
             }
         });
@@ -86,8 +88,12 @@ public class TimelineActivity extends BaseActivity implements ComposeTweetDialog
 
     @Override
     public void onFinishEditDialog(Tweet tweet) {
-        /*tweets.add(0, tweet);
-        aTweets.notifyDataSetChanged();*/
+        Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + viewPager.getCurrentItem());
+        // based on the current position you can then cast the page to the correct
+        // class and call the method:
+        if (viewPager.getCurrentItem() == 0 && page != null) {
+            ((HomeTimelineFragment)page).onFinishEditDialog(tweet);
+        }
     }
 
     public void onProfileView(MenuItem item) {

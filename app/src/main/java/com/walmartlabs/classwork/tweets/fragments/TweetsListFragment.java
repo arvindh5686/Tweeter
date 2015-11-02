@@ -111,4 +111,9 @@ public abstract class TweetsListFragment extends Fragment{
     }
 
     protected abstract void fetchAndPopulateTimeline(boolean clearCache);
+
+    public void onFinishEditDialog(Tweet tweet) {
+        tweets.add(0, tweet);
+        aTweets.notifyDataSetChanged();
+    }
 }
