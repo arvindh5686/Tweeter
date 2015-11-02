@@ -53,14 +53,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Followers"
-            android:id="@+id/tvFollowers" />
+            android:id="@+id/tvFollowers"
+            android:clickable="true"
+            android:onClick="showFollowers"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Following"
             android:layout_marginLeft="20dp"
-            android:id="@+id/tvFollowing" />
+            android:id="@+id/tvFollowing"
+            android:clickable="true"
+            android:onClick="showFriends"/>
 
     </LinearLayout>
 

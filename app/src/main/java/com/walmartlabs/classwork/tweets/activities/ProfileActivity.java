@@ -1,11 +1,13 @@
 package com.walmartlabs.classwork.tweets.activities;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -104,5 +106,19 @@ public class ProfileActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showFollowers(View view) {
+        Intent intent = new Intent(this, UserListActivity.class);
+        intent.putExtra("screen_name", user.getScreenName());
+        intent.putExtra("type", "followers");
+        startActivity(intent);
+    }
+
+    public void showFriends(View view) {
+        Intent intent = new Intent(this, UserListActivity.class);
+        intent.putExtra("screen_name", user.getScreenName());
+        intent.putExtra("type", "friends");
+        startActivity(intent);
     }
 }

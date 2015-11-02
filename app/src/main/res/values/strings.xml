@@ -15,5 +15,6 @@
     <color name="gray_color">#f5f8fa</color>
     <string name="title_activity_detailed_view">Tweet</string>
     <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_user_list">UserListActivity</string>
 
 </resources>

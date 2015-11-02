@@ -8,7 +8,6 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
-import com.walmartlabs.classwork.tweets.fragments.TweetsListFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -83,8 +82,6 @@ public class Tweet extends Model implements Parcelable {
                 tweets.add(tweet);
             }
         }
-
-
 
         return tweets;
     }
