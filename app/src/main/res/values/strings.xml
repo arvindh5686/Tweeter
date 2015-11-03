@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Fake Twitter</string>
+    <string name="app_name">Tweeter</string>
     <string name="login_label">Log in</string>
-    <string name="title_activity_timeline">Fake Twitter</string>
+    <string name="title_activity_timeline">Tweeter</string>
     <string name="current_user_screenname">arvindh5686</string>
     <string name="current_user_name">Aravindh</string>
     <string name="current_user_profile_image">http://pbs.twimg.com/profile_images/658728964928598016/Hc1EwByp_normal.jpg</string>
