@@ -8,11 +8,11 @@ import com.walmartlabs.classwork.tweets.net.TwitterClient;
 /**
  * Created by abalak5 on 10/31/15.
  */
-public class UserTimelineFragment extends TweetsListFragment {
+public class FavouritesFragment extends TweetsListFragment {
     private TwitterClient client;
 
-    public static UserTimelineFragment newInstance(Bundle args) {
-        UserTimelineFragment fragment = new UserTimelineFragment();
+    public static FavouritesFragment newInstance(Bundle args) {
+        FavouritesFragment fragment = new FavouritesFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -28,7 +28,7 @@ public class UserTimelineFragment extends TweetsListFragment {
         if (isNetworkAvailable()) {
             showProgressBar();
             String screenName = getArguments().getString("screen_name");
-            client.getUserTimeline(sinceId, maxId, screenName, getHandler());
+            client.getFavourites(sinceId, maxId, screenName, getHandler());
         } else {
             getFromCache();
         }

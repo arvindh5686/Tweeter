@@ -4,19 +4,20 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.tweets.R;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
-import com.walmartlabs.classwork.tweets.fragments.UserTimelineFragment;
+import com.walmartlabs.classwork.tweets.adapters.ProfilePagerAdapter;
 import com.walmartlabs.classwork.tweets.main.TwitterApplication;
 import com.walmartlabs.classwork.tweets.models.User;
 import com.walmartlabs.classwork.tweets.net.TwitterClient;
@@ -28,6 +29,7 @@ public class ProfileActivity extends BaseActivity {
 
     private TwitterClient client;
     private User user;
+    private ViewPager viewPager;
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,12 +43,12 @@ public class ProfileActivity extends BaseActivity {
                 getSupportActionBar().setTitle("@" + user.getScreenName());
                 populateProfileHeader(user);
 
-                if (savedInstanceState == null) {
+                /*if (savedInstanceState == null) {
                     UserTimelineFragment userTimelineFragment = UserTimelineFragment.newInstance(screenName);
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                     ft.replace(R.id.flContainer, userTimelineFragment);
                     ft.commit();
-                }
+                }*/
             }
 
             @Override
@@ -54,6 +56,14 @@ public class ProfileActivity extends BaseActivity {
                 super.onFailure(statusCode, headers, responseString, throwable);
             }
         });
+
+        viewPager = (ViewPager) findViewById(R.id.viewprofilepager);
+        Bundle args = new Bundle();
+        args.putString("screen_name", screenName);
+        viewPager.setAdapter(new ProfilePagerAdapter(getSupportFragmentManager(), args));
+
+        PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.profiletabs);
+        tabStrip.setViewPager(viewPager);
 
     }
 
