@@ -16,13 +16,12 @@ public class HomeTimelineFragment extends TweetsListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         client = TwitterApplication.getRestClient();
-        clear();
-        fetchAndPopulateTimeline();
     }
 
     @Override
     public void fetchAndPopulateTimeline() {
         if (isNetworkAvailable()) {
+            showProgressBar();
             client.getHomeTimeline(sinceId, maxId, getHandler());
         } else {
             getFromCache();

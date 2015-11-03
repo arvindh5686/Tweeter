@@ -83,6 +83,7 @@ android:orientation="vertical">
         android:layout_below="@+id/rightLayout"
         android:layout_alignLeft="@+id/rightLayout"
         android:layout_alignStart="@+id/rightLayout"
+        android:layout_marginBottom="10dp"
         >
 
         <ImageView
@@ -101,6 +102,18 @@ android:orientation="vertical">
             android:src="@drawable/ic_retweet"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="100dp"
+            android:clickable="true"
+            android:onClick="retweet"/>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/ivFavourite"
+            android:src="@mipmap/ic_star_unselected"
+            android:layout_alignTop="@+id/ivRetweet"
+            android:layout_toRightOf="@+id/ivRetweet"
+            android:layout_toEndOf="@+id/ivRetweet"
+            android:layout_marginLeft="80dp"
             android:clickable="true"
             android:onClick="retweet"/>
     </RelativeLayout>

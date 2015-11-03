@@ -23,12 +23,12 @@ public class UserTimelineFragment extends TweetsListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         client = TwitterApplication.getRestClient();
-        fetchAndPopulateTimeline();
     }
 
     @Override
     public void fetchAndPopulateTimeline() {
         if (isNetworkAvailable()) {
+            showProgressBar();
             String screenName = getArguments().getString("screen_name");
             client.getUserTimeline(sinceId, maxId, screenName, getHandler());
         } else {

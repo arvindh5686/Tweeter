@@ -24,7 +24,12 @@
         android:onClick="onProfileView">
     </item>
 
-
-
+    <item
+        android:id="@+id/miActionProgress"
+        android:title="Loading..."
+        android:visible="false"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"
+        app:actionLayout="@layout/footer_progress" />
 
 </menu>

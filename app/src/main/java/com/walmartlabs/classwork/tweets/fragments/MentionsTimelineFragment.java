@@ -16,12 +16,12 @@ public class MentionsTimelineFragment extends TweetsListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         client = TwitterApplication.getRestClient();
-        fetchAndPopulateTimeline();
     }
 
     @Override
     public void fetchAndPopulateTimeline() {
         if (isNetworkAvailable()) {
+            showProgressBar();
             client.getMentionsTimeline(sinceId, maxId, getHandler());
         } else {
             getFromCache();

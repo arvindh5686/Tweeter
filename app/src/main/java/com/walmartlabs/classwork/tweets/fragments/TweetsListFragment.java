@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.activeandroid.query.Delete;
 import com.codepath.apps.tweets.R;
@@ -25,6 +26,7 @@ import com.walmartlabs.classwork.tweets.util.EndlessScrollListener;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -39,6 +41,7 @@ public abstract class TweetsListFragment extends Fragment{
     private ListView lvTweets;
     protected static long maxId;
     protected static long sinceId = 1;
+    ProgressBar progressBarFooter;
 
     private SwipeRefreshLayout swipeContainer;
 
@@ -84,9 +87,18 @@ public abstract class TweetsListFragment extends Fragment{
                 swipeContainer.setRefreshing(false);
             }
         });
-        
+
+        // Inflate the footer
+        View footer = getLayoutInflater(savedInstanceState).inflate(
+                R.layout.footer_progress, null);
+        // Find the progressbar within footer
+        progressBarFooter = (ProgressBar)
+                footer.findViewById(R.id.pbFooterLoading);
+        // Add footer to ListView before setting adapter
+        lvTweets.addFooterView(footer);
         lvTweets.setAdapter(aTweets);
 
+        fetchAndPopulateTimeline();
         return view;
     }
 
@@ -129,12 +141,19 @@ public abstract class TweetsListFragment extends Fragment{
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 ArrayList<Tweet> tweets = Tweet.fromJsonArray(response);
-                if (tweets.size() > 0) {
-                    //get last tweets uid and subtract one as max_id is inclusive
-                    maxId = tweets.get(tweets.size() - 1).getUid() - 1;
-                }
-                addAll(tweets);
+                refreshView(tweets);
                 Log.d("Success", response.toString());
+            }
+
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                ArrayList<Tweet> tweets = null;
+                try {
+                    tweets = Tweet.fromJsonArray(response.getJSONArray("statuses"));
+                    refreshView(tweets);
+                    Log.d("Success", response.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -144,5 +163,23 @@ public abstract class TweetsListFragment extends Fragment{
         };
 
         return handler;
+    }
+
+    public void refreshView(ArrayList<Tweet> tweets) {
+        if (tweets.size() > 0) {
+            //get last tweets uid and subtract one as max_id is inclusive
+            maxId = tweets.get(tweets.size() - 1).getUid() - 1;
+        }
+        addAll(tweets);
+        hideProgressBar();
+    }
+
+    public void showProgressBar() {
+        progressBarFooter.setVisibility(View.VISIBLE);
+    }
+
+    // Hide progress
+    public void hideProgressBar() {
+        progressBarFooter.setVisibility(View.GONE);
     }
 }
