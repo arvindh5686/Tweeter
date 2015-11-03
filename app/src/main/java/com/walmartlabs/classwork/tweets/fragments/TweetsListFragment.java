@@ -39,9 +39,10 @@ public abstract class TweetsListFragment extends Fragment{
     private TweetsAdapter aTweets;
     private ArrayList<Tweet> tweets;
     private ListView lvTweets;
-    protected static long maxId;
-    protected static long sinceId = 1;
+    protected long maxId;
+    protected long sinceId = 1;
     ProgressBar progressBarFooter;
+    boolean loading = false;
 
     private SwipeRefreshLayout swipeContainer;
 
@@ -61,6 +62,8 @@ public abstract class TweetsListFragment extends Fragment{
         lvTweets.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public boolean onLoadMore(int page, int totalItemsCount) {
+                if (loading) return false;
+                loading = true;
                 fetchAndPopulateTimeline();
                 return true;
             }
@@ -70,7 +73,7 @@ public abstract class TweetsListFragment extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(getActivity(), DetailedViewActivity.class);
-                Tweet tweet = (Tweet) aTweets.getItem(position);
+                Tweet tweet = aTweets.getItem(position);
                 i.putExtra("tweet", tweet);
                 startActivity(i);
             }
@@ -82,7 +85,8 @@ public abstract class TweetsListFragment extends Fragment{
             public void onRefresh() {
                 sinceId = 1;
                 maxId = 0;
-                aTweets.clear();
+                clear();
+                loading = true;
                 fetchAndPopulateTimeline();
                 swipeContainer.setRefreshing(false);
             }
@@ -97,7 +101,7 @@ public abstract class TweetsListFragment extends Fragment{
         // Add footer to ListView before setting adapter
         lvTweets.addFooterView(footer);
         lvTweets.setAdapter(aTweets);
-
+        loading = true;
         fetchAndPopulateTimeline();
         return view;
     }
@@ -127,6 +131,7 @@ public abstract class TweetsListFragment extends Fragment{
 
     public void clear() {
         aTweets.clear();
+        aTweets.notifyDataSetChanged();
     }
 
     protected abstract void fetchAndPopulateTimeline();
@@ -172,6 +177,7 @@ public abstract class TweetsListFragment extends Fragment{
         }
         addAll(tweets);
         hideProgressBar();
+        loading = false;
     }
 
     public void showProgressBar() {
