@@ -9,8 +9,6 @@ import android.widget.ListView;
 
 import com.codepath.apps.tweets.R;
 import com.walmartlabs.classwork.tweets.adapters.UsersAdapter;
-import com.walmartlabs.classwork.tweets.fragments.FollowersListFragment;
-import com.walmartlabs.classwork.tweets.fragments.FriendsListFragment;
 import com.walmartlabs.classwork.tweets.fragments.UserListFragment;
 import com.walmartlabs.classwork.tweets.models.User;
 import com.walmartlabs.classwork.tweets.net.TwitterClient;
@@ -33,11 +31,7 @@ public class UserListActivity extends BaseActivity {
         if (savedInstanceState == null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             UserListFragment userListFragment;
-            if(type.equalsIgnoreCase("followers")) {
-                userListFragment = FollowersListFragment.newInstance(screenName);
-            } else {
-                userListFragment = FriendsListFragment.newInstance(screenName);
-            }
+            userListFragment = UserListFragment.newInstance(screenName, type);
 
             ft.replace(R.id.flUserlist, userListFragment);
             ft.commit();

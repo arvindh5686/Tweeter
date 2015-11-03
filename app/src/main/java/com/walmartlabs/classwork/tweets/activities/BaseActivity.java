@@ -38,10 +38,8 @@ public class BaseActivity extends AppCompatActivity implements TweetActions {
     }
 
     @Override
-    public void onFinishEditDialog(Tweet tweet) {
-    }
+    public void onFinishEditDialog(Tweet tweet) {}
 
     @Override
-    public void reTweet(Tweet tweet) {
-    }
+    public void reTweet(Tweet tweet) {}
 }
